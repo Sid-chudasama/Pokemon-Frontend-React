@@ -1,4 +1,4 @@
-#Frontend
+# Frontend
 
   - Client displays list of pokemons fetched from .Net 7 API(Headversity-Backend) with a search bar
   - You can search for specific pokemon and click to see the details such as height, weight for that pokemon
