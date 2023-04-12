@@ -1,6 +1,6 @@
 # Frontend
 
-  - Client displays list of pokemons fetched from .Net 7 API [Headversity-Backend](https://github.com/Sid-chudasama/Headversity-Backend) with a search bar
+  - Client displays list of pokemons fetched from .Net 7 API [Backend](https://github.com/Sid-chudasama/Headversity-Backend) with a search bar
   - You can search for specific pokemon and click to see the details such as height, weight for that pokemon
   - The list is paged and uses infinite scroll to lazy load the next set of available pokemons
   - Details are also loaded only when a specific pokemon is selected by calling the URI provided by backend
