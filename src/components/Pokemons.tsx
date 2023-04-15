@@ -7,6 +7,8 @@ import Container from 'react-bootstrap/esm/Container'
 import Form from 'react-bootstrap/esm/Form'
 import Row from 'react-bootstrap/esm/Row'
 import { Col } from 'react-bootstrap'
+import { OrderBy, SortField } from '../models/Enums'
+import { FaSortAmountDown, FaSortAmountUpAlt } from 'react-icons/fa'
 
 const Pokemons = () => {
     const api = "https://localhost:7136/Pokemon/Search"
@@ -15,10 +17,12 @@ const Pokemons = () => {
     const[page, setPage] = useState(1)
     const pageSize = 20
     const[query, setQuery] = useState("")
+    const[sortField, setSortField] = useState(SortField.Id)
+    const[orderBy, setOrderBy] = useState(OrderBy.Asc)
 
     const fetchData = async() => {
         try{
-        const result = await axios.get(`${api}?Query=${query}&Page=${page}&PageSize=${pageSize}`)
+        const result = await axios.get(`${api}?Query=${query}&SortField=${sortField}&OrderBy=${orderBy}&Page=${page}&PageSize=${pageSize}`)
         setsearchResult(prev => {
             return[...prev, ...result.data.pokemons]
         })
@@ -40,17 +44,65 @@ const Pokemons = () => {
             fetchData();
         }, 500)
         return () => clearTimeout(timeout)
-    },[query])
+    },[query, sortField, orderBy])
 
     function handleSearch(e: { target: { value: SetStateAction<string> } }){
         setPage(1)
         setQuery(e.target.value)
     }
 
+    function sortAndOrder(sort: SortField){
+        setPage(1)
+        if(sort == sortField){
+            orderBy == OrderBy.Asc ? setOrderBy(OrderBy.Desc) : setOrderBy(OrderBy.Asc)
+        }
+        else{
+            setSortField(sort)
+            setOrderBy(OrderBy.Asc)
+        }
+    }
+
     return <>
     <div>
-    <Container fluid className="col-md-6 text-center pt-1">
+    <Container fluid className="col-md-7 text-center pt-1">
             <Form.Control type='text' placeholder='Search Pokemon' onChange={handleSearch} className='my-5 shadow-lg form-control-lg'></Form.Control>
+            <Row className='my-4 mx-5 sticky-top bg-white border border-dark shadow-lg p-2'>
+                <Col onClick={() => sortAndOrder(SortField.Id)} role="button">
+                    ID 
+                    {
+                        sortField === SortField.Id && orderBy == OrderBy.Asc ? <FaSortAmountUpAlt/> :
+                        (sortField === SortField.Id && orderBy == OrderBy.Desc ? <FaSortAmountDown/> : '')
+                    }
+                </Col>
+                <Col onClick={() => sortAndOrder(SortField.Name)} role="button">
+                    NAME
+                    {
+                        sortField === SortField.Name && orderBy == OrderBy.Asc ? <FaSortAmountUpAlt/> :
+                        (sortField === SortField.Name && orderBy == OrderBy.Desc ? <FaSortAmountDown/> : '')
+                    }
+                </Col>
+                <Col  onClick={() => sortAndOrder(SortField.Height)} role="button">
+                    HEIGHT
+                    {
+                        sortField === SortField.Height && orderBy == OrderBy.Asc ? <FaSortAmountUpAlt/> :
+                        (sortField === SortField.Height && orderBy == OrderBy.Desc ? <FaSortAmountDown/> : '')
+                    }
+                </Col>
+                <Col  onClick={() => sortAndOrder(SortField.Weight)} role="button">
+                    WEIGHT
+                    {
+                        sortField === SortField.Weight && orderBy == OrderBy.Asc ? <FaSortAmountUpAlt/> :
+                        (sortField === SortField.Weight && orderBy == OrderBy.Desc ? <FaSortAmountDown/> : '')
+                    }
+                </Col>
+                <Col  onClick={() => sortAndOrder(SortField.Experience)} role="button">
+                    EXPERIENCE
+                    {
+                        sortField === SortField.Experience && orderBy == OrderBy.Asc ? <FaSortAmountUpAlt/> :
+                        (sortField === SortField.Experience && orderBy == OrderBy.Desc ? <FaSortAmountDown/> : '')
+                    }
+                </Col>
+            </Row>
             <InfiniteScroll
                 className='border border-dark shadow-lg rounded'
                 dataLength={page * pageSize}

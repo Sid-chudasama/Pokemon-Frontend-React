@@ -2,13 +2,16 @@ export interface Pokemon{
     id: number
     name: string
     url: string
+    pokemonDetail: PokemonDetails
 }
 
 export interface PokemonDetails{
-    name: string
-    base_experience: number
+    experience: number
     height: number
     weight: number
+}
+
+export interface PokemonDetailsExt{
     abilities: Array<Ability>
     species: Species
 }
